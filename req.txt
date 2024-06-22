@@ -1,0 +1,43 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-arm64
+asgiref=3.5.2=py310hca03da5_0
+blas=1.0=openblas
+boto3=1.34.82=py310hca03da5_0
+botocore=1.34.82=py310hca03da5_0
+brotli-python=1.0.9=py310h313beb8_8
+bzip2=1.0.8=h80987f9_6
+ca-certificates=2024.3.11=hca03da5_0
+certifi=2024.6.2=pypi_0
+charset-normalizer=3.3.2=pypi_0
+django=4.1=py310hca03da5_0
+googlemaps=4.10.0=pypi_0
+idna=3.7=pypi_0
+jmespath=1.0.1=py310hca03da5_0
+libcxx=14.0.6=h848a8c0_0
+libffi=3.4.4=hca03da5_1
+libgfortran=5.0.0=11_3_0_hca03da5_28
+libgfortran5=11.3.0=h009349e_28
+libopenblas=0.3.21=h269037a_0
+llvm-openmp=14.0.6=hc6e5704_0
+ncurses=6.4=h313beb8_0
+numpy=1.26.4=py310h3b2db8e_0
+numpy-base=1.26.4=py310ha9811e2_0
+openssl=3.0.14=h80987f9_0
+pip=24.0=py310hca03da5_0
+pysocks=1.7.1=py310hca03da5_0
+python=3.10.14=hb885b13_1
+python-dateutil=2.9.0post0=py310hca03da5_2
+readline=8.2=h1a28f6b_0
+requests=2.32.3=pypi_0
+s3transfer=0.10.1=py310hca03da5_0
+setuptools=69.5.1=py310hca03da5_0
+six=1.16.0=pyhd3eb1b0_1
+sqlite=3.45.3=h80987f9_0
+sqlparse=0.4.4=py310hca03da5_0
+tk=8.6.14=h6ba3021_0
+tzdata=2024a=h04d1e81_0
+urllib3=2.2.2=py310hca03da5_0
+wheel=0.43.0=py310hca03da5_0
+xz=5.4.6=h80987f9_1
+zlib=1.2.13=h18a0788_1
