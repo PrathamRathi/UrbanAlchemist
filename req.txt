@@ -8,11 +8,11 @@ botocore=1.34.82=py310hca03da5_0
 brotli-python=1.0.9=py310h313beb8_8
 bzip2=1.0.8=h80987f9_6
 ca-certificates=2024.3.11=hca03da5_0
-certifi=2024.6.2=pypi_0
-charset-normalizer=3.3.2=pypi_0
+# certifi=2024.6.2=pypi_0
+# charset-normalizer=3.3.2=pypi_0
 django=4.1=py310hca03da5_0
-googlemaps=4.10.0=pypi_0
-idna=3.7=pypi_0
+# googlemaps=4.10.0=pypi_0
+# idna=3.7=pypi_0
 jmespath=1.0.1=py310hca03da5_0
 libcxx=14.0.6=h848a8c0_0
 libffi=3.4.4=hca03da5_1
@@ -29,7 +29,7 @@ pysocks=1.7.1=py310hca03da5_0
 python=3.10.14=hb885b13_1
 python-dateutil=2.9.0post0=py310hca03da5_2
 readline=8.2=h1a28f6b_0
-requests=2.32.3=pypi_0
+# requests=2.32.3=pypi_0
 s3transfer=0.10.1=py310hca03da5_0
 setuptools=69.5.1=py310hca03da5_0
 six=1.16.0=pyhd3eb1b0_1
