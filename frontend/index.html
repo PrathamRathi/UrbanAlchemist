@@ -1,0 +1,59 @@
+<!doctype html>
+<!--
+ @license
+ Copyright 2019 Google LLC. All Rights Reserved.
+ SPDX-License-Identifier: Apache-2.0
+-->
+<html>
+  <head>
+    <title>Heatmaps</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.ts"></script>
+  </head>
+  <body>
+    <div id="floating-panel">
+      <button id="toggle-heatmap">Toggle Heatmap</button>
+      <button id="change-gradient">Change gradient</button>
+      <button id="change-radius">Change radius</button>
+      <button id="change-opacity">Change opacity</button>
+    </div>
+    <div id="map"></div>
+
+    <!-- 
+      The `defer` attribute causes the script to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises. See
+      https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+      for more information.
+      -->
+    <script>
+      async function fetchApiKey() {
+        try {
+          const response = await fetch('/keys/gcp.txt');
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const apiKey = await response.text();
+          loadGoogleMaps(apiKey.trim());
+        } catch (error) {
+          console.error('There was a problem with the fetch operation:', error);
+        }
+      }
+
+      function loadGoogleMaps(apiKey) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=visualization&v=weekly`;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+
+      function initMap() {
+        // Your map initialization code here
+      }
+
+      fetchApiKey();
+    </script>
+  </body>
+</html>
