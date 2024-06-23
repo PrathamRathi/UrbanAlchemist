@@ -37,7 +37,11 @@ const MapComponent = () => {
     }, [map]);
 
     const calculateTrafficScore = (speed: number, freeFlowSpeed: number, jamFactor: number, confidence: number, currentSpeed: number): number => {
-        return 4.5; // Math.min(100, Math.max(0, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100));
+        // console.log(currentSpeed);
+        // console.log(speed);
+        // console.log(freeFlowSpeed);
+        // console.log(jamFactor);
+        return Math.min(100, Math.max(0.1, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100));
     };
     const getHeatMapData = async () => {
       // let response = await fetch('https://your-api-url');
@@ -93,7 +97,9 @@ const MapComponent = () => {
               const lat = start.lat + (end.lat - start.lat) * fraction;
               const lng = start.lng + (end.lng - start.lng) * fraction;
               // console.log(lat);
-              const trafficScore = calculateTrafficScore(result.currentFlow.speed, result.currentFlow.freeFlowSpeed, result.currentFlow.jamFactor, result.currentFlow.confidence, result.currentFlow.currentSpeed);
+              // console.log(result);
+              // console.log(result.currentFlow.speedUncapped);
+              const trafficScore = calculateTrafficScore(result.currentFlow.speed, result.currentFlow.freeFlow, result.currentFlow.jamFactor, result.currentFlow.confidence, result.currentFlow.speedUncapped);
               // console.log(trafficScore);
               const score = isNaN(trafficScore) ? 0 : trafficScore;
               // Add more points for higher scores
@@ -105,19 +111,28 @@ const MapComponent = () => {
                 // console.log(offsetLat);
                 // console.log(offsetLng);
                 const center = {
-                  lat: lat + offsetLat,
-                  lng: lng + offsetLng,
+                  lat: lat + offsetLat  as number,
+                  lng: lng + offsetLng  as number,
                 };
-                
-                points.push(new google.maps.LatLng(center.lat, center.lng));
+                console.log(center.lat);
+                console.log(center.lng);
+                console.log(trafficScore);
+                // points.push(new google.maps.LatLng(center.lat as number, center.lng as number));
+                points.push({ location: new google.maps.LatLng(center.lat as number, center.lng as number), weight: trafficScore });
               }
             }
           }
         }
       }
       console.log(points);
-      const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
-      setHeatmap(heatmap);
+      // <HeatmapLayer data={data} />
+      // const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
+      // heatmap.setMap(map);
+      const heatmap = new google.maps.visualization.HeatmapLayer({
+        data: points,
+        map: map,
+      });
+      // setHeatmap(heatmap);
     };
     const toggleHeatMap = () => {
         if (heatmap) {
