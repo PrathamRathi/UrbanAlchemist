@@ -9,16 +9,16 @@ const ResultPage: React.FC = () => {
   const { location: markerLocation, bounds } = location.state as { location: { lat: number; lng: number }, bounds: { ne: { lat: number, lng: number }, sw: { lat: number, lng: number } } };
   const pageRef = useRef<HTMLDivElement>(null);
 
-  const handleSaveAsPNG = () => {
-    if (pageRef.current) {
-      html2canvas(pageRef.current).then((canvas) => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'page.png';
-        link.click();
-    });
-  }
-  };
+  // const handleSaveAsPNG = () => {
+  //   if (pageRef.current) {
+  //     html2canvas(pageRef.current).then((canvas) => {
+  //       const link = document.createElement('a');
+  //       link.href = canvas.toDataURL('image/png');
+  //       link.download = 'page.png';
+  //       link.click();
+  //   });
+  // }
+  // };
   return (
     <div>
       <div ref={pageRef} style={{ textAlign: 'center', padding: '20px' }}>

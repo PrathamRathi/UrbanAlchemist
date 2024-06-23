@@ -11,7 +11,8 @@ def traffic_request(request):
     print(request.GET)
     neLat, neLon = request.GET['neLat'], request.GET['neLng']
     swLat, swLon = request.GET['swLat'], request.GET['swLng']
-    output = td.get_traffic_data(f"{swLat},{swLon},{neLat},{neLon}")
+    output = td.get_traffic_data(f"{swLon},{swLat},{neLon},{neLat}")
+    #  'bbox:west longitude,south latitude,east longitude,north latitude'"
     print(output)
     return JsonResponse(output)
 
