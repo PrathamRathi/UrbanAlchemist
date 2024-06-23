@@ -1,6 +1,6 @@
 import * as React from 'react';
 import html2canvas from "html2canvas";
-
+import data from './data/data.json'
 declare global {
   interface Window {
     google?: any;
@@ -52,25 +52,28 @@ const MapComponent = () => {
       // const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
       // setHeatmap(heatmap);
       // Read data from local file
-      let data 
-      (async () => {
-        try {
-          const response = await fetch('./data/data.json');
-          console.log(response)
-          if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-          }
-          data = await response.json();
-          console.log(data); // Use the data as needed
-        } catch (error) {
-          console.error('There has been a problem with your fetch operation:', error);
-        }
-      })();
+      // @ts-ignore
+      let vals:any = data['results'];
+      console.log(vals);
+      console.log(data);
+      // (async () => {
+      //   try {
+      //     const response = await fetch('./data/data.json');
+      //     console.log(response)
+      //     if (!response.ok) {
+      //       throw new Error('Network response was not ok ' + response.statusText);
+      //     }
+      //     data = await response.json();
+      //     console.log(data); // Use the data as needed
+      //   } catch (error) {
+      //     console.error('There has been a problem with your fetch operation:', error);
+      //   }
+      // })();
       
 
       let points: google.maps.visualization.WeightedLocation[] = [];
       // @ts-ignore
-      for (let item of data) {
+      for (let item of vals) {
         const trafficScore = calculateTrafficScore(item.speed, item.freeFlowSpeed, item.jamFactor, item.confidence, item.currentSpeed);
         points.push({ location: new google.maps.LatLng(item.latitude, item.longitude), weight: trafficScore });
       }
