@@ -72,10 +72,42 @@ const MapComponent = () => {
       
 
       let points: google.maps.visualization.WeightedLocation[] = [];
+      const HOUSE_LENGTH = 0.00015; // Approximately 15-20 meters in lat/lng units
       // @ts-ignore
-      for (let item of vals) {
-        const trafficScore = calculateTrafficScore(item.speed, item.freeFlowSpeed, item.jamFactor, item.confidence, item.currentSpeed);
-        points.push({ location: new google.maps.LatLng(item.latitude, item.longitude), weight: trafficScore });
+      for (let result of vals) {
+        console.log(result.currentFlow);
+        for (let link of result.location.shape.links) {
+          for (let i = 0; i < link.points.length - 1; i++) {
+            const start = link.points[i];
+            const end = link.points[i + 1];
+
+            const dist = Math.sqrt(
+              Math.pow(end.lat - start.lat, 2) +
+              Math.pow(end.lng - start.lng, 2)
+            );
+
+            const steps = Math.ceil(dist / HOUSE_LENGTH);
+
+            for (let step = 0; step <= steps; step++) {
+              const fraction = step / steps;
+              const lat = start.lat + (end.lat - start.lat) * fraction;
+              const lng = start.lng + (end.lng - start.lng) * fraction;
+              console.log(lat);
+              const trafficScore = calculateTrafficScore(result.currentFlow.speed, result.currentFlow.freeFlowSpeed, result.currentFlow.jamFactor, result.currentFlow.confidence, result.currentFlow.currentSpeed);
+              const score = isNaN(trafficScore) ? 0 : trafficScore;
+              // Add more points for higher scores
+              const numPoints = Math.ceil(score / 10); // Add up to 10 additional points
+              console.log(numPoints);
+              for (let j = 0; j < numPoints; j++) {
+                const offsetLat = (Math.random() - 0.5) * 0.0001; // Small random offset
+                const offsetLng = (Math.random() - 0.5) * 0.0001;
+                console.log(offsetLat);
+                console.log(offsetLng);
+                points.push(new google.maps.LatLng(lat + offsetLat, lng + offsetLng));
+              }
+            }
+          }
+        }
       }
       console.log(points);
       const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
