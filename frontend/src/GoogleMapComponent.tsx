@@ -52,18 +52,32 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
         const sw = bounds.getSouthWest(); // Southwest corner
 
         try {
-          const response = await axios.get('http://localhost:8000/traffic_request', {
+          const response = await axios.get('http://localhost:8000/heatmap/', {
             params: {
-              "neLat": ne.lat(),
-              "neLng": ne.lng(),
-              "swLat": sw.lat(),
-              "swLng": sw.lng()
+              "lat": marker.lat,
+              "lon": marker.lng,
+              "z": 14,
             }
           });
-          // Handle the response if needed
-          console.log(response.data);
+          // // Handle the response if needed
+          // console.log(response.data);
+          // const blob = new Blob([response.data], {type: "image/png"})
+
+          // // Create a URL for the Blob
+          // const url = window.URL.createObjectURL(blob);
+
+          // // Create an anchor element and trigger a download
+          // const link = document.createElement('a');
+          // link.href = url;
+          // link.setAttribute('download', 'heatmap.png'); // You can set the desired file name here
+          // document.body.appendChild(link);
+          // link.click();
+
+          // // Clean up
+          // link.parentNode?.removeChild(link);
+          // window.URL.revokeObjectURL(url);
         } catch (error) {
-          console.error('Error fetching traffic data:', error);
+          console.error('Error making heatmap', error);
         }
 
         onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } });
@@ -73,7 +87,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
 
   const handleAutoZoomIn = () => {
     if (marker && map) {
-      map.setZoom(11);
+      map.setZoom(14);
       map.panTo(marker);
     }
   };

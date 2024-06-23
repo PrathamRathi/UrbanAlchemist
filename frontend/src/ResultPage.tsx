@@ -30,12 +30,12 @@ const ResultPage: React.FC = () => {
         <p>Northeast Corner: Latitude: {bounds.ne.lat}, Longitude: {bounds.ne.lng}</p>
         <p>Southwest Corner: Latitude: {bounds.sw.lat}, Longitude: {bounds.sw.lng}</p>
         {/* Placeholder for the image to be rendered after the backend call */}
-        {/* <div>
+        <div>
           <h2>Optimized Image Placeholder</h2>
-          <div style={{ width: '100%', height: '400px', backgroundColor: '#e0e0e0' }}></div>
-        </div> */}
-        <MapComponent/>
-        <button onClick={handleSaveAsPNG}>Save as PNG, love</button>
+          <img src="/heatmap.jpeg" alt="Traffic Heatmap" />
+        </div>
+        {/* <MapComponent/>
+        <button onClick={handleSaveAsPNG}>Save as PNG, love</button> */}
       </div>
     </div>
   );

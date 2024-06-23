@@ -7,6 +7,7 @@ import ResultPage from './ResultPage';
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [heatMapSrc, setHeatMapSrc] = useState('');
 
   const handleLocationSubmit = (location: { lat: number; lng: number }, bounds: { ne: { lat: number, lng: number }, sw: { lat: number, lng: number } }) => {
     setLoading(true);
