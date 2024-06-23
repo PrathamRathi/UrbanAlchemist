@@ -10,6 +10,7 @@ import logging
 import base64
 import boto3
 import re
+import subprocess
 
 from botocore.exceptions import ClientError
 
@@ -45,6 +46,7 @@ def run_multi_modal_prompt(bedrock_runtime, model_id, messages, max_tokens):
 
     return response_body
 
+
 def get_base64_encoded_image(image_path):
     with open(image_path, "rb") as image_file:
         binary_data = image_file.read()
@@ -57,30 +59,26 @@ def claude_grade_report_prompt():
     """
     Entrypoint for Anthropic Claude multimodal prompt.
     """
+    grade = "err"
+    reason = "err"
     try:
 
         # boto3.setup_default_session(
         #     profile_name='AdministratorAccess-905418001332')
 
         bedrock_runtime = boto3.client(service_name='bedrock-runtime')
-
-
         model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
         max_tokens = 1000
-        input_image = "traffic.jpeg"
+        input_image = "heatmap.jpeg"
         input_text = """Prompt: You are an environmental assessment expert specializing in urban fuel emissions. Your task is to assign a grade letter for the current fuel emissions in a specific area. Here are the details:
                     - Location: Center coordinates (lat, lng)
                     - Traffic score: {} out of 100 (where 0 is lowest traffic and 100 is highest)
 
                     Consider the following factors in your assessment:
                     1. The specific region and its characteristics
-                    2. Population density of the area
-                    3. Current traffic patterns
-                    4. Local environmental regulations
-                    5. Availability of public transportation
-                    6. Green initiatives in place
 
-                Based on these factors, assign a grade letter from the following options: A, B, C, D, or F, where A is excellent (low emissions) and F is poor (high emissions).
+
+                Based on these factors, assign a grade letter from the following options: A, B, C, D, or F, where A is excellent (low emissions) and F is poor (high emissions). If you don't have enough information just provide a hypothical guess for reasoning and grade. Don't mention to the user there are guesses being made.
 
                 Provide your grade in the following format exactly:
                 ###{grade_letter}
@@ -96,10 +94,11 @@ def claude_grade_report_prompt():
                 Ensure your response contains the grade in the specified format, followed by the reasoning within the <Reason> tags."""
 
         message = {"role": "user",
-                    "content": [
-                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image)}},
-                        {"type": "text", "text": input_text}
-                    ]}
+                   "content": [
+                           {"type": "image", "source": {
+                               "type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image)}},
+                       {"type": "text", "text": input_text}
+                   ]}
 
         messages = [message]
 
@@ -107,7 +106,7 @@ def claude_grade_report_prompt():
             bedrock_runtime, model_id, messages, max_tokens)
 
         grade_pattern = re.compile(r'###([A-F])')
-        match = grade_pattern.search(response)
+        match = grade_pattern.search(response['content'][0]["text"])
 
         if match:
             grade = match.group(1)
@@ -117,7 +116,7 @@ def claude_grade_report_prompt():
 
         # Extract the reasoning
         reason_pattern = re.compile(r'<Reason>(.*?)</Reason>', re.DOTALL)
-        reason_match = reason_pattern.search(response)
+        reason_match = reason_pattern.search(response['content'][0]["text"])
 
         if reason_match:
             reason = reason_match.group(1).strip()
@@ -130,25 +129,24 @@ def claude_grade_report_prompt():
         message = err.response["Error"]["Message"]
         logger.error("A client error occurred: %s", message)
         print("A client error occured: " +
-                format(message))
-                
-    return [grade, reason]
+              format(message))
+
+    return grade + "," + reason
 
 def claude_street_view_prompt():
     """
     Entrypoint for Anthropic Claude multimodal prompt.
     """
     try:
-
-        # boto3.setup_default_session(
-        #     profile_name='AdministratorAccess-905418001332')
+        boto3.setup_default_session(
+            profile_name='AdministratorAccess-905418001332')
 
         bedrock_runtime = boto3.client(service_name='bedrock-runtime')
 
-
         model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
         max_tokens = 1000
-        input_image = ["traffic.jpeg", "street_view_img0", "street_view_img1", "street_view_img2"]
+        input_image = ["traffic_image.png", "streetview_image0.jpg",
+                       "streetview_image1.jpg", "streetview_image2.jpg"]
         input_text = """You are an expert in public transportation and green urban planning with a keen eye for detail. You've been tasked with analyzing traffic patterns and proposing infrastructure improvements to a government official. You will be provided with the following:
             1. A traffic map of the region (latitude: lat, longitude: lng) where red signifies higher traffic and green signifies lower traffic.
             2. Three street view images of areas with the highest fuel consumption.
@@ -156,13 +154,17 @@ def claude_street_view_prompt():
             Your response should be concise yet compelling, tailored for a government official. Consider factors such as traffic flow, public transit options, and potential for green initiatives."""
 
         message = {"role": "user",
-                    "content": [
-                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image[0])}},
-                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image[1])}},
-                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image[2])}},
-                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": get_base64_encoded_image(input_image[3])}},
-                        {"type": "text", "text": input_text}
-                    ]}
+                   "content": [
+                        #    {"type": "image", "source": {"type": "base64", "media_type": "image/png",
+                        #                                 "data": get_base64_encoded_image(input_image[0])}},
+                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                                        "data": get_base64_encoded_image(input_image[1])}},
+                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                                        "data": get_base64_encoded_image(input_image[2])}},
+                           {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg",
+                                                        "data": get_base64_encoded_image(input_image[3])}},
+                       {"type": "text", "text": input_text}
+                   ]}
 
         messages = [message]
 
@@ -170,52 +172,52 @@ def claude_street_view_prompt():
             bedrock_runtime, model_id, messages, max_tokens)
 
         answer_pattern = re.compile(r'<answer>(.*?)</answer>', re.DOTALL)
-        match = answer_pattern.search(response)
+        match = answer_pattern.search(response['content'][0]["text"])
 
         if match:
             answer_content = match.group(1)
+            return answer_content
             print(answer_content)
         else:
             print("No <answer> tags found in the output: ", answer_content)
-        print(json.dumps(response, indent=4))
+            return "Error not found"
+        # print(json.dumps(response, indent=4))
 
     except ClientError as err:
         message = err.response["Error"]["Message"]
         logger.error("A client error occurred: %s", message)
         print("A client error occured: " +
-                format(message))
+              format(message))
     return answer_content
 
 
-def main():
+def test_main():
     """
     Entrypoint for Anthropic Claude multimodal prompt example.
     """
 
     try:
 
-        # boto3.setup_default_session(
-        #     profile_name='AdministratorAccess-905418001332')
+        boto3.setup_default_session(
+            profile_name='AdministratorAccess-905418001332')
 
         bedrock_runtime = boto3.client(service_name='bedrock-runtime')
-
 
         model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
         max_tokens = 1000
         input_image = "traffic.jpeg"
         input_text = "how can you add public transport to reduce the traffic seen in this image? be specific with where you will add changes"
 
-
         # Read reference image from file and encode as base64 strings.
         #    with open(input_image, "rb") as image_file:
         #        content_image = base64.b64encode(image_file.read()).decode('utf8')
 
         message = {"role": "user",
-                    "content": [
-                        #    {"type": "image", "source": {"type": "base64",
-                        #        "media_type": "image/jpeg", "data": content_image}},
-                        {"type": "text", "text": input_text}
-                    ]}
+                   "content": [
+                       #    {"type": "image", "source": {"type": "base64",
+                       #        "media_type": "image/jpeg", "data": content_image}},
+                       {"type": "text", "text": input_text}
+                   ]}
 
         messages = [message]
 
@@ -227,9 +229,9 @@ def main():
         message = err.response["Error"]["Message"]
         logger.error("A client error occurred: %s", message)
         print("A client error occured: " +
-                format(message))
+              format(message))
 
 
 if __name__ == "__main__":
     claude_street_view_prompt()
-    claude_grade_report_prompt()
+    # claude_grade_report_prompt()

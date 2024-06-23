@@ -78,12 +78,14 @@ def get_traffic_data(bbox, date_range='2022-03-01T08:00:00Z/2024-03-31T08:00:00Z
                     #     offsetLng = (random.random() - 0.5) * 0.0001
                     points.append(
                         (score, ["description"] if "description" in result["location"] else "", lat, lng))
-
-        for i, point in enumerate(sorted(points)[-3:]):
+                    
+        ret = sorted(points)[-3:]
+        for i, point in enumerate(ret):
             print(i)
             mapImage.write_streetview_images(
                 (point[2], point[3]), f"streetview_image{i}.jpg")
-        return JsonResponse({})
+
+        return {"locations": ret}
 
     except requests.exceptions.RequestException as e:
         print(f"Request Exception: {e}")

@@ -86,8 +86,7 @@ def get_images(x,y,z):
     background.save('heatmap.jpeg')
     n = random.randint(0, 100)
     file_name = 'heatmap' + str(n) + '.jpeg'
-    path = '/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + file_name
-    background.save('/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + file_name)
+    background.save('/Users/akashnambiar/Documents/BerkHackathon/UrbanAlchemist/frontend/public' + file_name)
     return {
         'response': 200,
         'path': './' + file_name,

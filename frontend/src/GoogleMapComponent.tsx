@@ -19,7 +19,7 @@ type responseData = {
 }
 interface GoogleMapComponentProps {
   onSubmit: (location: { lat: number; lng: number }, bounds: { ne: { lat: number, lng: number }, sw: { lat: number, lng: number } },
-    data:responseData
+    data: responseData
   ) => void;
   zoom: number;
   initialZoom: number;
@@ -50,7 +50,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
     }
   };
 
-   const handleSubmit = async () => {
+  const handleSubmit = async () => {
     if (marker && map) {
       const bounds = map.getBounds();
       if (bounds) {
@@ -63,10 +63,11 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
               "lat": marker.lat,
               "lon": marker.lng,
               "z": 14,
+              "neLat": ne.lat(), "neLng": ne.lng(), "swLat": sw.lat(), "swLng": sw.lng()
             }
           }
-        );
-        onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } }, response.data);
+          );
+          onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } }, response.data);
         } catch (error) {
           console.error('Error making heatmap', error);
         }
