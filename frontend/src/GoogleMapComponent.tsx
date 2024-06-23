@@ -1,6 +1,7 @@
 // GoogleMapComponent.tsx
 import React, { useState, useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import axios from 'axios';
 
 const containerStyle = {
   width: '100%',
@@ -43,12 +44,28 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
     }
   };
 
-  const handleSubmit = () => {
+   const handleSubmit = async () => {
     if (marker && map) {
       const bounds = map.getBounds();
       if (bounds) {
         const ne = bounds.getNorthEast(); // Northeast corner
         const sw = bounds.getSouthWest(); // Southwest corner
+
+        try {
+          const response = await axios.get('http://localhost:8000/traffic_request', {
+            params: {
+              "neLat": ne.lat(),
+              "neLng": ne.lng(),
+              "swLat": sw.lat(),
+              "swLng": sw.lng()
+            }
+          });
+          // Handle the response if needed
+          console.log(response.data);
+        } catch (error) {
+          console.error('Error fetching traffic data:', error);
+        }
+
         onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } });
       }
     }

@@ -1,4 +1,5 @@
 import requests
+import os
 
 def get_traffic_data(bbox, date_range='2022-03-01T08:00:00Z/2024-03-31T08:00:00Z', aggregate='average'):
     """
@@ -14,7 +15,10 @@ def get_traffic_data(bbox, date_range='2022-03-01T08:00:00Z/2024-03-31T08:00:00Z
     - dict: JSON response data from the API, or None if there's an error.
     """
     # Construct the URL
-    with open("../keys/here.txt", 'r') as file:
+    module_dir = os.path.dirname(__file__) 
+    file_path = os.path.join(module_dir, '../keys/here.txt')
+
+    with open(file_path, 'r') as file:
         api_key = file.read().strip()  # Read and strip any whitespace/newlines
     url = f"https://data.traffic.hereapi.com/v7/flow?locationReferencing=shape&in=bbox:{bbox}&apiKey={api_key}&aggregate={aggregate}&time={date_range}"
 
@@ -25,7 +29,6 @@ def get_traffic_data(bbox, date_range='2022-03-01T08:00:00Z/2024-03-31T08:00:00Z
         # Check if the request was successful
         if response.status_code == 200:
             data = response.json()
-            print(len(data['results']))  # Print the traffic data
             return data
         else:
             print(f"Error: {response.status_code}")
