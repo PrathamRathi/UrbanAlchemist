@@ -37,7 +37,7 @@ const MapComponent = () => {
     }, [map]);
 
     const calculateTrafficScore = (speed: number, freeFlowSpeed: number, jamFactor: number, confidence: number, currentSpeed: number): number => {
-        return Math.min(100, Math.max(0, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100));
+        return 4.5; // Math.min(100, Math.max(0, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100));
     };
     const getHeatMapData = async () => {
       // let response = await fetch('https://your-api-url');
@@ -92,18 +92,24 @@ const MapComponent = () => {
               const fraction = step / steps;
               const lat = start.lat + (end.lat - start.lat) * fraction;
               const lng = start.lng + (end.lng - start.lng) * fraction;
-              console.log(lat);
+              // console.log(lat);
               const trafficScore = calculateTrafficScore(result.currentFlow.speed, result.currentFlow.freeFlowSpeed, result.currentFlow.jamFactor, result.currentFlow.confidence, result.currentFlow.currentSpeed);
+              // console.log(trafficScore);
               const score = isNaN(trafficScore) ? 0 : trafficScore;
               // Add more points for higher scores
               const numPoints = Math.ceil(score / 10); // Add up to 10 additional points
-              console.log(numPoints);
+              // console.log(numPoints);
               for (let j = 0; j < numPoints; j++) {
                 const offsetLat = (Math.random() - 0.5) * 0.0001; // Small random offset
                 const offsetLng = (Math.random() - 0.5) * 0.0001;
-                console.log(offsetLat);
-                console.log(offsetLng);
-                points.push(new google.maps.LatLng(lat + offsetLat, lng + offsetLng));
+                // console.log(offsetLat);
+                // console.log(offsetLng);
+                const center = {
+                  lat: lat + offsetLat,
+                  lng: lng + offsetLng,
+                };
+                
+                points.push(new google.maps.LatLng(center.lat, center.lng));
               }
             }
           }
