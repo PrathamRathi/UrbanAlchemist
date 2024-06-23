@@ -41,7 +41,7 @@ const MapComponent = () => {
         // console.log(speed);
         // console.log(freeFlowSpeed);
         // console.log(jamFactor);
-        return Math.min(100, Math.max(0.1, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100));
+        return Math.min(100, Math.max(0.1, ((0.4 * (1 - (currentSpeed / freeFlowSpeed))) + (0.6 * (jamFactor / 10))) * 100)); // Need to change min to 0
     };
     const getHeatMapData = async () => {
       // let response = await fetch('https://your-api-url');
@@ -132,7 +132,7 @@ const MapComponent = () => {
         data: points,
         map: map,
       });
-      // setHeatmap(heatmap);
+      setHeatmap(heatmap);
     };
     const toggleHeatMap = () => {
         if (heatmap) {

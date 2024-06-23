@@ -1,5 +1,6 @@
 import requests
 streetview_url = "https://maps.googleapis.com/maps/api/streetview"
+staticmap_url = "https://maps.googleapis.com/maps/api/staticmap"
 
 
 parameters = {
@@ -13,9 +14,16 @@ parameters = {
     # "signature": "YOUR_SIGNATURE"
 }
 
+static_parameters = {
+    "key": "AIzaSyAYPCPC3qF1lro_PG7SDUIfHksMt-8Ro5w",
+    "lat": 23.03,
+    "lng": 72.58,
+    "zoom": 6
+}
+
 
 response = requests.get(streetview_url, params=parameters)
-
+"https://maps.googleapis.com/maps/api/staticmap?center=23.03,72.58&zoom=6&size=640x400&path=weight:3|color:blue|enc:aofcFz_bhVJ[n@ZpAp@t@b@uA%60FuAzEoCdJiDpLs@VM@y@s@oBcBkAw@cCoAuBu@eEaAiAa@iAi@w@a@o@g@g@k@e@u@uAaCc@i@w@y@eAo@i@UaBc@kAGo@@]JyKA}EC{G?q@?IGKCeGA{CAyCAyEAwEBaFAkJ?yGEyAIiLAiB?{@BcBJ}@@aBGwBEo@A@j@BjBFTHjEl@fOD%60C?|@RARAJERWPL@FE^S%60AI%60A&key=AIzaSyAYPCPC3qF1lro_PG7SDUIfHksMt-8Ro5w"
 
 if response.status_code == 200:
     # Save the image to a file
