@@ -16,7 +16,7 @@ const MapComponent = () => {
   React.useEffect(() => {
     // Load the Google Maps JavaScript API library
     const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization&callback=initMap";
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAYPCPC3qF1lro_PG7SDUIfHksMt-8Ro5w&libraries=visualization&callback=initMap";
     script.async = true;
     document.body.appendChild(script);
     window.initMap = () => { // Initialize map in the global scope
@@ -52,17 +52,29 @@ const MapComponent = () => {
       // const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
       // setHeatmap(heatmap);
       // Read data from local file
-      const response = await fetch('data/data.txt');
-      const text = await response.text();
-      const data = JSON.parse(text);
+      let data 
+      (async () => {
+        try {
+          const response = await fetch('./data/data.json');
+          console.log(response)
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          data = await response.json();
+          console.log(data); // Use the data as needed
+        } catch (error) {
+          console.error('There has been a problem with your fetch operation:', error);
+        }
+      })();
+      
 
       let points: google.maps.visualization.WeightedLocation[] = [];
-
+      // @ts-ignore
       for (let item of data) {
         const trafficScore = calculateTrafficScore(item.speed, item.freeFlowSpeed, item.jamFactor, item.confidence, item.currentSpeed);
         points.push({ location: new google.maps.LatLng(item.latitude, item.longitude), weight: trafficScore });
       }
-
+      console.log(points);
       const heatmap = new google.maps.visualization.HeatmapLayer({ data: points });
       setHeatmap(heatmap);
     };

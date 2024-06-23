@@ -1,6 +1,7 @@
 // ResultPage.tsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import MapComponent from './MapComponent';
 
 const ResultPage: React.FC = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const ResultPage: React.FC = () => {
         <h2>Optimized Image Placeholder</h2>
         <div style={{ width: '100%', height: '400px', backgroundColor: '#e0e0e0' }}></div>
       </div>
+      <MapComponent/>
     </div>
   );
 };
