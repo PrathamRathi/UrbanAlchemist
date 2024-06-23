@@ -1,6 +1,6 @@
 import requests
 
-def get_traffic_data(api_key, bbox, date_range, aggregate='average'):
+def get_traffic_data(bbox, date_range, aggregate='average'):
     """
     Retrieves traffic flow data from HERE API based on provided parameters.
 
@@ -14,6 +14,8 @@ def get_traffic_data(api_key, bbox, date_range, aggregate='average'):
     - dict: JSON response data from the API, or None if there's an error.
     """
     # Construct the URL
+    with open("../keys/here.txt", 'r') as file:
+        api_key = file.read().strip()  # Read and strip any whitespace/newlines
     url = f"https://data.traffic.hereapi.com/v7/flow?locationReferencing=shape&in=bbox:{bbox}&apiKey={api_key}&aggregate={aggregate}&time={date_range}"
 
     try:
@@ -34,17 +36,3 @@ def get_traffic_data(api_key, bbox, date_range, aggregate='average'):
         print(f"Request Exception: {e}")
         return None
 
-
-# Example usage:
-if __name__ == "__main__":
-    # Open the file to read the API key
-    with open("../keys/here.txt", 'r') as file:
-        api_key = file.read().strip()  # Read and strip any whitespace/newlines
-
-    # Define bounding box coordinates and date range
-    bbox = '-97.21416527301778,32.64668911540128,-96.23226219684591,32.99291376909479'
-    date_range = '2022-03-01T08:00:00Z/2022-03-31T08:00:00Z'
-    aggregate = 'average'
-
-    # Call the function to get traffic data
-    traffic_data = get_traffic_data(api_key, bbox, date_range, aggregate)
