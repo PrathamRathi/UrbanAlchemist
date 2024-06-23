@@ -110,10 +110,20 @@ def claude_grade_report_prompt():
         match = grade_pattern.search(response)
 
         if match:
-            formatted_output = match.group(1)
-            print("Result:", formatted_output)
+            grade = match.group(1)
+            print("Grade:", grade)
         else:
-            print("No valid grade found in the output.")
+            print("No valid grade found in the output: ", response)
+
+        # Extract the reasoning
+        reason_pattern = re.compile(r'<Reason>(.*?)</Reason>', re.DOTALL)
+        reason_match = reason_pattern.search(response)
+
+        if reason_match:
+            reason = reason_match.group(1).strip()
+            print("Reason:", reason)
+        else:
+            print("No reasoning found in the output.")
         print(json.dumps(response, indent=4))
 
     except ClientError as err:
@@ -121,7 +131,8 @@ def claude_grade_report_prompt():
         logger.error("A client error occurred: %s", message)
         print("A client error occured: " +
                 format(message))
-    return formatted_output
+                
+    return [grade, reason]
 
 def claude_street_view_prompt():
     """
@@ -165,7 +176,7 @@ def claude_street_view_prompt():
             answer_content = match.group(1)
             print(answer_content)
         else:
-            print("No <answer> tags found in the input string.")
+            print("No <answer> tags found in the output: ", answer_content)
         print(json.dumps(response, indent=4))
 
     except ClientError as err:
