@@ -73,7 +73,7 @@ def main():
        model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
        max_tokens = 1000
        input_image = "traffic.jpeg"
-       input_text = "What's in this image?"
+       input_text = "how can you add public transport to reduce the traffic seen in this image? be specific with where you will add changes"
 
 
        # Read reference image from file and encode as base64 strings.
