@@ -20,8 +20,12 @@ def traffic_request(request):
 def heatmap_request(request):
     print(request.GET)
     lat, lon, z = request.GET['lat'], request.GET['lon'], request.GET['z']
-    output = get_heatmap.get_images(float(lat),float(lon),int(z))
-    print(output)
+    output = {
+        'claudeResponse': 'this will be claudes response',
+        'highTraffic': 'The selected high traffic areas were (insert 1, 2, 3), with scores of (1,2,3)'
+    }
+    heatmap_out = get_heatmap.get_images(float(lat),float(lon),int(z))
+    output['path'] = heatmap_out['path']
     return JsonResponse(output)
 
 def model_analysis(request):

@@ -12,9 +12,15 @@ const center = {
   lat: -3.745,
   lng: -38.523,
 };
-
+type responseData = {
+  claudeResponse: string;
+  highTraffic: string;
+  path: string;
+}
 interface GoogleMapComponentProps {
-  onSubmit: (location: { lat: number; lng: number }, bounds: { ne: { lat: number, lng: number }, sw: { lat: number, lng: number } }) => void;
+  onSubmit: (location: { lat: number; lng: number }, bounds: { ne: { lat: number, lng: number }, sw: { lat: number, lng: number } },
+    data:responseData
+  ) => void;
   zoom: number;
   initialZoom: number;
 }
@@ -58,29 +64,12 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({ onSubmit, zoom,
               "lon": marker.lng,
               "z": 14,
             }
-          });
-          // // Handle the response if needed
-          // console.log(response.data);
-          // const blob = new Blob([response.data], {type: "image/png"})
-
-          // // Create a URL for the Blob
-          // const url = window.URL.createObjectURL(blob);
-
-          // // Create an anchor element and trigger a download
-          // const link = document.createElement('a');
-          // link.href = url;
-          // link.setAttribute('download', 'heatmap.png'); // You can set the desired file name here
-          // document.body.appendChild(link);
-          // link.click();
-
-          // // Clean up
-          // link.parentNode?.removeChild(link);
-          // window.URL.revokeObjectURL(url);
+          }
+        );
+        onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } }, response.data);
         } catch (error) {
           console.error('Error making heatmap', error);
         }
-
-        onSubmit(marker, { ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } });
       }
     }
   };

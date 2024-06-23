@@ -3,7 +3,7 @@ from PIL import Image
 import math
 import base64
 from io import BytesIO
-import subprocess
+import random
 api_key = 'TAllBSgd0-4_VT-zuAMS8ML1hAKRpL4wwxSqhxA4cnw'
 
 def lat_lon_to_tile_coords(lat, lon, zoom):
@@ -84,8 +84,11 @@ def get_images(x,y,z):
     background.paste(foreground, (0, 0), foreground)
     img_str = pil_image_to_base64(background)
     background.save('heatmap.jpeg')
+    n = random.randint(0, 100)
+    file_name = 'heatmap' + str(n) + '.jpeg'
+    path = '/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + file_name
+    background.save('/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + file_name)
     return {
         'response': 200,
-        'path': 'heatmap.jpeg',
-        'data':img_str
+        'path': './' + file_name,
     }
