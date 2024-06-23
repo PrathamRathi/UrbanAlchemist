@@ -31,5 +31,8 @@
     "typescript": "^5.4.5",
     "vite": "^5.2.13"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  }
 }
