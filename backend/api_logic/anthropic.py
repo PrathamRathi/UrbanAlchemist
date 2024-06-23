@@ -56,25 +56,25 @@ def main():
         # boto3.setup_default_session(
         #     profile_name='AdministratorAccess-905418001332')
 
-       bedrock_runtime = boto3.client(service_name='bedrock-runtime')
+        bedrock_runtime = boto3.client(service_name='bedrock-runtime')
 
 
-       model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
-       max_tokens = 1000
-       input_image = "traffic.jpeg"
-       input_text = "how can you add public transport to reduce the traffic seen in this image? be specific with where you will add changes"
+        model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
+        max_tokens = 1000
+        input_image = "traffic.jpeg"
+        input_text = "how can you add public transport to reduce the traffic seen in this image? be specific with where you will add changes"
 
 
         # Read reference image from file and encode as base64 strings.
-     #    with open(input_image, "rb") as image_file:
-     #        content_image = base64.b64encode(image_file.read()).decode('utf8')
+        #    with open(input_image, "rb") as image_file:
+        #        content_image = base64.b64encode(image_file.read()).decode('utf8')
 
         message = {"role": "user",
-                   "content": [
-                       #    {"type": "image", "source": {"type": "base64",
-                       #        "media_type": "image/jpeg", "data": content_image}},
-                       {"type": "text", "text": input_text}
-                   ]}
+                    "content": [
+                        #    {"type": "image", "source": {"type": "base64",
+                        #        "media_type": "image/jpeg", "data": content_image}},
+                        {"type": "text", "text": input_text}
+                    ]}
 
         messages = [message]
 
@@ -86,7 +86,7 @@ def main():
         message = err.response["Error"]["Message"]
         logger.error("A client error occurred: %s", message)
         print("A client error occured: " +
-              format(message))
+                format(message))
 
 
 if __name__ == "__main__":
