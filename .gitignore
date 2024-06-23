@@ -7,3 +7,5 @@ static/
 /frontend/keys/*
 /frontend/node_modules
 /backend/keys/*
+/old-frontend/node_modules
+/old-frontend/keys
