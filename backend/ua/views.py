@@ -44,7 +44,7 @@ def heatmap_request(request):
     output['claudeResponse'] = ant.claude_street_view_prompt()
     
     output['claudeResponse'] += "\n"
-    output['claudeResponse'] += ant.claude_grade_report_prompt()
+    output['claudeResponse'] += "Grade_Report: " + ant.claude_grade_report_prompt()
 
     return JsonResponse(output)
 
