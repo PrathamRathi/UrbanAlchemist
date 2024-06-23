@@ -4,6 +4,7 @@ import math
 import base64
 from io import BytesIO
 import random
+
 api_key = 'TAllBSgd0-4_VT-zuAMS8ML1hAKRpL4wwxSqhxA4cnw'
 
 def lat_lon_to_tile_coords(lat, lon, zoom):
@@ -86,17 +87,15 @@ def get_images(x,y,z):
     else:
         raise Exception("Failed to fetch satellite tile or content is not an image")
 
-    environmental_zones_url = f"https://maps.hereapi.com/v3/base/mc/{z}/{x}/{y}/png?size=512&features=environmental_zones:all,pois:disabled"
-    environmental_zones_response = requests.get(environmental_zones_url)
-    if environmental_zones_response.status_code == 200 and environmental_zones_response.headers['Content-Type'].startswith('image'):
-        image_data = environmental_zones_response.content
-        # Save the image data to a file
-        with open('environmental_zones_image.png', 'wb') as file:
-            file.write(image_data)
-    else:
-        raise Exception("Failed to fetch environmental zone tile or content is not an image")
-
-    from PIL import Image
+    # environmental_zones_url = f"https://maps.hereapi.com/v3/base/mc/{z}/{x}/{y}/png?size=512&features=environmental_zones:all,pois:disabled"
+    # environmental_zones_response = requests.get(environmental_zones_url)
+    # if environmental_zones_response.status_code == 200 and environmental_zones_response.headers['Content-Type'].startswith('image'):
+    #     image_data = environmental_zones_response.content
+    #     # Save the image data to a file
+    #     with open('environmental_zones_image.png', 'wb') as file:
+    #         file.write(image_data)
+    # else:
+    #     raise Exception("Failed to fetch environmental zone tile or content is not an image")
 
     background = Image.open("received_image.png")
     foreground = Image.open("traffic_image.png")
@@ -106,23 +105,23 @@ def get_images(x,y,z):
     background.save('heatmap.jpeg')
     n = random.randint(0, 100)
     heat_map_file_name = 'heatmap' + str(n) + '.jpeg'
-    path = '/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + heat_map_file_name
-    background.save('/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + heat_map_file_name)
+    path = '/Users/akashnambiar/Documents/BerkHackathon/UrbanAlchemist/frontend/public'
+    background.save(path + heat_map_file_name)
 
-    environmental_zones = Image.open("environmental_zones_image.png")
-    environmental_zones.save('environment.jpeg')
-    environment_file_name = 'environment' + str(n) + '.jpeg'
-    environmental_zones.save('/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + environment_file_name)
+    # environmental_zones = Image.open("environmental_zones_image.png")
+    # environmental_zones.save('environment.jpeg')
+    # environment_file_name = 'environment' + str(n) + '.jpeg'
+    # environmental_zones.save(path + environment_file_name)
 
     detailed_satellite = Image.open("detailed_satellite_image.png")
     detailed_satellite.save('satellite.jpeg')
     detailed_satellite_name = 'satellite' + str(n) + '.jpeg'
-    detailed_satellite.save('/Users/pratham/Desktop/UrbanAlchemist/frontend/public/' + detailed_satellite_name)
+    detailed_satellite.save(path + detailed_satellite_name)
 
     return {
         'response': 200,
         'path': './' + heat_map_file_name,
-        'environment_path': './' + environment_file_name,
+        # 'environment_path': './' + environment_file_name,
         'detailed_satellite_path': './' + detailed_satellite_name,
 
     }

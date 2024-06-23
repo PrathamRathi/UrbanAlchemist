@@ -27,7 +27,7 @@ const HomePage: React.FC<HomePageProps> = ({setHeatMapSrc, setClaudeText, setHig
       setLoading(false);
       navigate('/result', { state: { location, bounds } });
     }, 2000); // Simulate loading screen for 2 seconds
-    setHeatMapSrc(data.path);
+    setHeatMapSrc("./publicheatmap15.jpeg");
     setClaudeText(data.claudeResponse);
     setHighTrafficAreas(data.highTraffic);
   };
