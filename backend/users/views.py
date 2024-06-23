@@ -7,7 +7,7 @@ from ML_models.analyze_in_request import requestPipeline
 import json
 from .models import *
 from .serializers import *
-
+# random change
 @csrf_exempt
 def post(request):
         if request.method == 'POST':
