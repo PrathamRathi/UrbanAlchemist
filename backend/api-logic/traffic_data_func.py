@@ -1,6 +1,6 @@
 import requests
 
-def get_traffic_data(bbox, date_range, aggregate='average'):
+def get_traffic_data(bbox, date_range='2022-03-01T08:00:00Z/2024-03-31T08:00:00Z', aggregate='average'):
     """
     Retrieves traffic flow data from HERE API based on provided parameters.
 
@@ -25,7 +25,7 @@ def get_traffic_data(bbox, date_range, aggregate='average'):
         # Check if the request was successful
         if response.status_code == 200:
             data = response.json()
-            print(data)  # Print the traffic data
+            print(len(data['results']))  # Print the traffic data
             return data
         else:
             print(f"Error: {response.status_code}")
@@ -35,4 +35,8 @@ def get_traffic_data(bbox, date_range, aggregate='average'):
     except requests.exceptions.RequestException as e:
         print(f"Request Exception: {e}")
         return None
+
+
+
+    # bbox = '-97.21416527301778,32.64668911540128,-96.23226219684591,32.99291376909479'
 
